@@ -13,7 +13,7 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.Font(None, 32)
 # Set window title
-pygame.display.set_caption("My Pygame RPG")
+pygame.display.set_caption("OMG PYGAME AMONG US IN REAL LIFE AT 3:00 AM UNEXPECTED TURN OF EVENTS GAY POTION WITH ELMO AT 3 AM I ALMOST DIED REAL!!!!! NOT CLICKBAIT PLEASE WATCH FIRST VIDEO VIDEO GAMES WITH ELMO IN VIRTUAL REALITY BIG BABES NOT CLICKBAIT 18+")
 
 
 # Define character position and movement speed
@@ -172,7 +172,8 @@ while True:
             if event.key == pygame.K_n:
                 if game_state == "menu":
                     game_state = "game"
-#bloopscadoopbloggypoggie
+
+
 
 
    
