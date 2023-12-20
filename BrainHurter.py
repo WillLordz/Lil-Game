@@ -172,6 +172,7 @@ while True:
             if event.key == pygame.K_n:
                 if game_state == "menu":
                     game_state = "game"
+#bloopscadoopbloggypoggie
 
 
    
