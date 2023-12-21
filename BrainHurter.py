@@ -102,6 +102,10 @@ while True:
                     tile_type = get_tile_type(player_x, player_y + movement_speed)
                     if tile_type != 1:
                         player_y += movement_speed
+                elif event.key == pygame.K_r:
+                        player_location_reset()
+                        genrate_map()
+
 
             #Pull up menu
             if event.type == pygame.KEYDOWN:
