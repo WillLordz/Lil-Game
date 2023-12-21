@@ -36,8 +36,9 @@ player_reseting = False
 
 
 
+
 map_data = [[0 for x in range(MAP_WIDTH)] for y in range(MAP_HEIGHT)]
-def genrate_map():
+def generate_map():
     for y in range(MAP_HEIGHT):
             for x in range(MAP_WIDTH):
                 if random.random() < 0.01:
@@ -46,7 +47,7 @@ def genrate_map():
                     map_data[y][x] = 1
                 else:
                     map_data[y][x] = 0
-genrate_map()
+generate_map()
 
 
 #player returns to centure
@@ -74,7 +75,7 @@ while True:
         #Map Logic
         if player_x < 0 or player_x >= SCREEN_WIDTH or player_y < 0 or player_y >= SCREEN_HEIGHT:
             player_location_reset()
-            genrate_map()
+            generate_map()
             bomb_charges = 3   
 
         
