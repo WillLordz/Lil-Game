@@ -65,6 +65,36 @@ def get_tile_type(player_x, player_y):
         tile_y = player_y // TILE_SIZE
         return map_data[tile_y][tile_x]
 
+#Draws map on screen
+def draw_map():
+            MAP_WIDTH = 28
+            MAP_HEIGHT = 22
+            TILE_SIZE = 32
+            for y in range(MAP_HEIGHT):
+                for x in range(MAP_WIDTH):
+                    if map_data[y][x] == 0:
+                        pygame.draw.rect(screen, (0, 5, 0), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                    elif map_data[y][x] == 1:
+                        pygame.draw.rect(screen, (139, 69, 30), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                    elif map_data[y][x] == 2:
+                        pygame.draw.rect(screen, (255, 255, 255), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+
+def bomb_checks(bomb_charges):
+    if event.key == pygame.K_e:
+        if bomb_charges >= 0:
+            bomb_charges -= 1    
+            if player_direction == "right":
+                map_data[tile_y][tile_x + 1] = 0
+            if player_direction == "left":
+                map_data[tile_y][tile_x - 1] = 0
+            if player_direction == "up":
+                map_data[tile_y - 1][tile_x] = 0
+            if player_direction == "down":
+                map_data[tile_y + 1][tile_x] = 0
+    elif event.key == pygame.K_r:
+        bomb_charges = 3
+
+    return bomb_charges    
 # Get the tile type and print it
 
 
@@ -83,6 +113,7 @@ while True:
         # Handle keyboard input
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
+                bomb_charges = bomb_checks(bomb_charges)
                 if event.key == pygame.K_a:
                     player_direction = "left"
                     tile_type = get_tile_type(player_x - movement_speed, player_y)
@@ -106,7 +137,7 @@ while True:
                 elif event.key == pygame.K_r: 
                     bomb_charges = 3
                     player_location_reset()
-                    genrate_map()
+                    generate_map()
 
 
             #Pull up menu
@@ -124,19 +155,7 @@ while True:
                 map_data[tile_y][tile_x] = 0
 
 
-            #Bomb Mechanics
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_e:
-                    if bomb_charges >= 0:
-                        bomb_charges -= 1    
-                        if player_direction == "right":
-                            map_data[tile_y][tile_x + 1] = 0
-                        if player_direction == "left":
-                            map_data[tile_y][tile_x - 1] = 0
-                        if player_direction == "up":
-                            map_data[tile_y - 1][tile_x] = 0
-                        if player_direction == "down":
-                            map_data[tile_y + 1][tile_x] = 0    
+        #Bomb Mechanics
 
         #print(player_x)
         #print(player_y)
@@ -154,17 +173,10 @@ while True:
         #print(map_data)
 
         # Draw the map tiles
-        for y in range(MAP_HEIGHT):
-            for x in range(MAP_WIDTH):
-                if map_data[y][x] == 0:
-                    pygame.draw.rect(screen, (0, 5, 0), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                elif map_data[y][x] == 1:
-                    pygame.draw.rect(screen, (139, 69, 30), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                elif map_data[y][x] == 2:
-                    pygame.draw.rect(screen, (255, 255, 255), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
         
+            
 
-        
+        draw_map()
 
         pygame.draw.rect(screen, (128, 0, 128), (player_x, player_y, 32, 32))
 
@@ -173,11 +185,6 @@ while True:
         pygame.display.flip()
 
 
-    elif game_state == "menu":
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_n:
-                if game_state == "menu":
-                    game_state = "game"
 
 
 
