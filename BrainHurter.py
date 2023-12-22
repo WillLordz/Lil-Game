@@ -91,8 +91,6 @@ def bomb_checks(bomb_charges):
                 map_data[tile_y - 1][tile_x] = 0
             if player_direction == "down":
                 map_data[tile_y + 1][tile_x] = 0
-    elif event.key == pygame.K_r:
-        bomb_charges = 3
 
     return bomb_charges    
 # Get the tile type and print it
