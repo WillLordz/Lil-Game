@@ -51,53 +51,64 @@ generate_map()
 
 
 #player returns to centure
-def player_location_reset():
-    global player_x, player_y
-    player_x = 32 * (random.randint(12, 16))
-    player_y = 32 * (random.randint(9, 13))
 
-
-def get_tile_type(player_x, player_y):
-    if player_x < 0 or player_x >= SCREEN_WIDTH or player_y < 0 or player_y >= SCREEN_HEIGHT:
-        return 0
-    else:
-        tile_x = player_x // TILE_SIZE
-        tile_y = player_y // TILE_SIZE
-        return map_data[tile_y][tile_x]
-
-#Draws map on screen
-def draw_map():
-            MAP_WIDTH = 28
-            MAP_HEIGHT = 22
-            TILE_SIZE = 32
-            for y in range(MAP_HEIGHT):
-                for x in range(MAP_WIDTH):
-                    if map_data[y][x] == 0:
-                        pygame.draw.rect(screen, (0, 5, 0), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                    elif map_data[y][x] == 1:
-                        pygame.draw.rect(screen, (139, 69, 30), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                    elif map_data[y][x] == 2:
-                        pygame.draw.rect(screen, (255, 255, 255), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-
-def bomb_checks(bomb_charges):
-    if event.key == pygame.K_e:
-        if bomb_charges >= 0:
-            bomb_charges -= 1    
-            if player_direction == "right":
-                map_data[tile_y][tile_x + 1] = 0
-            if player_direction == "left":
-                map_data[tile_y][tile_x - 1] = 0
-            if player_direction == "up":
-                map_data[tile_y - 1][tile_x] = 0
-            if player_direction == "down":
-                map_data[tile_y + 1][tile_x] = 0
-
-    return bomb_charges    
 # Get the tile type and print it
 
 
 while True:
+
+    def assign_images():
+        wall_tile = pygame.image.load('Wall_Tile.png')
+        return wall_tile
+
+    def player_location_reset():
+        global player_x, player_y
+        player_x = 32 * (random.randint(12, 16))
+        player_y = 32 * (random.randint(9, 13))
+
+
+    def get_tile_type(player_x, player_y):
+        if player_x < 0 or player_x >= SCREEN_WIDTH or player_y < 0 or player_y >= SCREEN_HEIGHT:
+            return 0
+        else:
+            tile_x = player_x // TILE_SIZE
+            tile_y = player_y // TILE_SIZE
+            return map_data[tile_y][tile_x]
+
+    #Draws map on screen
+    def draw_map():
+                wall_tile = assign_images()
+                MAP_WIDTH = 28
+                MAP_HEIGHT = 22
+                TILE_SIZE = 32
+                for y in range(MAP_HEIGHT):
+                    for x in range(MAP_WIDTH):
+                        if map_data[y][x] == 0:
+                            pygame.draw.rect(screen, (0, 5, 0), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                        elif map_data[y][x] == 1:
+                            screen.blit(wall_tile, (x * 32, y * 32))
+                        elif map_data[y][x] == 2:
+                            pygame.draw.rect(screen, (255, 255, 255), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+
+    def bomb_checks(bomb_charges):
+        if event.key == pygame.K_e:
+            if bomb_charges >= 0:
+                bomb_charges -= 1    
+                if player_direction == "right":
+                    map_data[tile_y][tile_x + 1] = 0
+                if player_direction == "left":
+                    map_data[tile_y][tile_x - 1] = 0
+                if player_direction == "up":
+                    map_data[tile_y - 1][tile_x] = 0
+                if player_direction == "down":
+                    map_data[tile_y + 1][tile_x] = 0
+
+        return bomb_charges
     
+    
+
+
+
     if game_state == "game":
 
         #Map Logic
