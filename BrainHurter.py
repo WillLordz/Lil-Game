@@ -59,7 +59,9 @@ while True:
 
     def assign_images():
         wall_tile = pygame.image.load('Wall_Tile.png')
-        return wall_tile
+        background_tile = pygame.image.load('Background_Tile.png')
+        bomb_tile = pygame.image.load('Bomb_Tile.png')
+        return wall_tile, background_tile, bomb_tile
 
     def player_location_reset():
         global player_x, player_y
@@ -77,18 +79,18 @@ while True:
 
     #Draws map on screen
     def draw_map():
-                wall_tile = assign_images()
+                wall_tile, background_tile, bomb_tile = assign_images()
                 MAP_WIDTH = 28
                 MAP_HEIGHT = 22
                 TILE_SIZE = 32
                 for y in range(MAP_HEIGHT):
                     for x in range(MAP_WIDTH):
                         if map_data[y][x] == 0:
-                            pygame.draw.rect(screen, (0, 5, 0), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                            screen.blit(background_tile, (x * 32, y * 32))
                         elif map_data[y][x] == 1:
                             screen.blit(wall_tile, (x * 32, y * 32))
                         elif map_data[y][x] == 2:
-                            pygame.draw.rect(screen, (255, 255, 255), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                            screen.blit(bomb_tile, (x * 32, y * 32))
 
     def bomb_checks(bomb_charges):
         if event.key == pygame.K_e:
