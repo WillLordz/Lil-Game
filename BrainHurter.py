@@ -37,31 +37,66 @@ player_reseting = False
 
 
 
-map_data = [[0 for x in range(MAP_WIDTH)] for y in range(MAP_HEIGHT)]
-def generate_map():
-    for y in range(MAP_HEIGHT):
-            for x in range(MAP_WIDTH):
-                if random.random() < 0.01:
-                    map_data[y][x] = 2                    
-                elif random.random() < 0.55:
-                    map_data[y][x] = 1
-                else:
-                    map_data[y][x] = 0
-generate_map()
+
 
 
 #player returns to centure
 
 # Get the tile type and print it
+map_data = [[0 for x in range(MAP_WIDTH)] for y in range(MAP_HEIGHT)]
+def generate_map():
+        for y in range(MAP_HEIGHT):
+                for x in range(MAP_WIDTH):
+                    if random.random() < 0.01:
+                        map_data[y][x] = 2                    
+                    elif random.random() < 0.55:
+                        map_data[y][x] = 1
+                    else:
+                        map_data[y][x] = 0
+generate_map()
 
+def probabilty_selection():
+        bomb_percentage = 0.01
+        wall_percentage = 0.45
+        selection = False
+        while selection != True:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    print("1")
+                    selection = True
+        return selection
 
 while True:
+
+    def probabilty_selection():
+        selection = probabilty_selection()
+        bomb_percentage = 0.01
+        wall_percentage = 0.45
+        while selection != True:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    print("1")
+                    selection = True
+        return wall_percentage, bomb_percentage
+
+
+    def generate_map():
+        wall_percentage, bomb_percentage = probabilty_selection()
+        for y in range(MAP_HEIGHT):
+                for x in range(MAP_WIDTH):
+                    if random.random() < bomb_percentage:
+                        map_data[y][x] = 2                    
+                    elif random.random() < wall_percentage:
+                        map_data[y][x] = 1
+                    else:
+                        map_data[y][x] = 0
 
     def assign_images():
         wall_tile = pygame.image.load('Wall_Tile.png')
         background_tile = pygame.image.load('Background_Tile.png')
         bomb_tile = pygame.image.load('Bomb_Tile.png')
-        return wall_tile, background_tile, bomb_tile
+        player = pygame.image.load('Player.png')
+        return wall_tile, background_tile, bomb_tile, player 
 
     def player_location_reset():
         global player_x, player_y
@@ -78,19 +113,20 @@ while True:
             return map_data[tile_y][tile_x]
 
     #Draws map on screen
-    def draw_map():
-                wall_tile, background_tile, bomb_tile = assign_images()
+    def draw_map_and_player():
+                wall_tile, background_tile, bomb_tile, player = assign_images()
                 MAP_WIDTH = 28
                 MAP_HEIGHT = 22
                 TILE_SIZE = 32
                 for y in range(MAP_HEIGHT):
                     for x in range(MAP_WIDTH):
                         if map_data[y][x] == 0:
-                            screen.blit(background_tile, (x * 32, y * 32))
+                            screen.blit(background_tile, (x * TILE_SIZE, y * TILE_SIZE))
                         elif map_data[y][x] == 1:
-                            screen.blit(wall_tile, (x * 32, y * 32))
+                            screen.blit(wall_tile, (x * TILE_SIZE, y * TILE_SIZE))
                         elif map_data[y][x] == 2:
-                            screen.blit(bomb_tile, (x * 32, y * 32))
+                            screen.blit(bomb_tile, (x * TILE_SIZE, y * TILE_SIZE))
+                screen.blit(player, (player_x, player_y, 32, 32))
 
     def bomb_checks(bomb_charges):
         if event.key == pygame.K_e:
@@ -106,6 +142,8 @@ while True:
                     map_data[tile_y + 1][tile_x] = 0
 
         return bomb_charges
+    
+    
     
     
 
@@ -149,14 +187,13 @@ while True:
                     bomb_charges = 3
                     player_location_reset()
                     generate_map()
+                elif event.key == pygame.K_p:
+                    probabilty_selection()
+
 
 
             #Pull up menu
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:
-                    if game_state == "game":
-                        game_state = "menu"
-
+            
 
             tile_x = player_x // TILE_SIZE
             tile_y = player_y // TILE_SIZE
@@ -186,11 +223,10 @@ while True:
         # Draw the map tiles
         
             
-
-        draw_map()
-
-        pygame.draw.rect(screen, (128, 0, 128), (player_x, player_y, 32, 32))
-
+        
+        draw_map_and_player()
+        
+        
         text_surface = font.render(str(bomb_charges), True, (255, 0, 0))
         screen.blit(text_surface, (0, 0))
         pygame.display.flip()
